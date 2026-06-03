@@ -1,8 +1,5 @@
-using System;
 using System.Security.Claims;
-using System.Text;
 using Application;
-using Asp.Versioning;
 using FluentValidation;
 using Infrastructure;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -110,26 +107,32 @@ namespace TaskMangement.API
                 });
             #endregion
 
-            #region API Versioning
+            //#region API Versioning
 
-            builder.Services
-                .AddApiVersioning(options =>
+            //builder.Services
+            //    .AddApiVersioning(options =>
+            //    {
+            //        options.DefaultApiVersion = new ApiVersion(1, 0);
+
+            //        options.AssumeDefaultVersionWhenUnspecified = true;
+
+            //        options.ReportApiVersions = true;
+
+            //        options.ApiVersionReader = new UrlSegmentApiVersionReader();
+            //    })
+            //    .AddMvc(); // 🔥 REQUIRED for controllers
+            //#endregion
+
+            // Add CORS
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowAll", policy =>
                 {
-                    options.DefaultApiVersion = new ApiVersion(1, 0);
-
-                    options.AssumeDefaultVersionWhenUnspecified = true;
-
-                    options.ReportApiVersions = true;
-
-                    options.ApiVersionReader = new UrlSegmentApiVersionReader();
-                })
-                .AddMvc(); // 🔥 REQUIRED for controllers
-            #endregion
-
-
-            // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-            builder.Services.AddOpenApi();
-
+                    policy.AllowAnyOrigin()
+                          .AllowAnyMethod()
+                          .AllowAnyHeader();
+                });
+            });
             var app = builder.Build();
 
             // Seed Roles and Admin User
@@ -141,15 +144,12 @@ namespace TaskMangement.API
                 await AdminSeeder.SeedAsync(scope.ServiceProvider);
 
             }
-            // Swagger/OpenAPI
-            if (app.Environment.IsDevelopment())
-            {
-                app.MapOpenApi();
-            }
+
 
             // Middlewares
             app.UseHttpsRedirection();
             app.UseMiddleware<GlobalExceptionMiddleware>();
+            app.UseCors("AllowAll");
             app.UseAuthentication();
             app.UseAuthorization();
 
