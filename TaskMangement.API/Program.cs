@@ -32,7 +32,6 @@ namespace TaskMangement.API
             builder.Services.AddValidatorsFromAssemblyContaining<Program>();
             // swagger
             builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
 
             builder.Services.AddApplication();
             builder.Services.AddInfrastructure();
@@ -142,15 +141,10 @@ namespace TaskMangement.API
                 await AdminSeeder.SeedAsync(scope.ServiceProvider);
 
             }
-
-            if (app.Environment.IsDevelopment() || app.Environment.EnvironmentName == "Development")
+            // Swagger/OpenAPI
+            if (app.Environment.IsDevelopment())
             {
-                app.UseSwagger();
-                app.UseSwaggerUI(c =>
-                {
-                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Task API V1");
-                    c.RoutePrefix = string.Empty; // Swagger opens on root URL
-                });
+                app.MapOpenApi();
             }
 
             // Middlewares
