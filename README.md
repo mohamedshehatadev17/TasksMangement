@@ -307,9 +307,9 @@ Use these credentials to call `POST /api/auth/login`, then use the returned JWT 
 
 | Method | Endpoint | Auth | Description |
 |--------|----------|------|-------------|
-| `POST` | `/api/auth/register` | ❌ | Register a new user |
-| `POST` | `/api/auth/login` | ❌ | Login and receive JWT token |
-| `POST` | `/api/auth/refresh-token` | ❌ | Refresh an expired JWT token |
+| `POST` | `/api/auth/register` | ✅ | Register a new user |
+| `POST` | `/api/auth/login` | ✅ | Login and receive JWT token |
+| `POST` | `/api/auth/refresh-token` | ✅ | Refresh an expired JWT token |
 | `GET` | `/api/auth/profile` | ✅ | Get current user profile |
 
 ### Tasks
